@@ -1,28 +1,49 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="form">
+    <AutoMulti v-bind:data="countries"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AutoMulti from "./components/AutoMulti.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    AutoMulti,
+  },
+
+  data() {
+    return {
+      countries: ([] = [])
+    };
+  },
+
+  created() {
+    var that = this;
+    fetch("https://api.first.org/data/v1/countries?q=in")
+      .then((response) => response.json())
+      .then((data) => {
+        var object = data.data;
+        let count = [];
+        for (const property in object) {
+          count.push({ name: object[property].country });
+          console.log(`${property}: ${object[property]}`);
+        }
+        console.log(count, "count");
+        that.countries = count;
+      });
+  },
+
+  
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+* {
+  margin: 0px;
+  padding: 0px;
 }
+
+
 </style>
